@@ -1,21 +1,24 @@
-import { uid } from '../uid.js';
+import { uid } from '../modules/uid.js';
 
-export default class LocalStorage {
+/**
+ * @class Storage
+ */
+export default class Storage {
   /**
-   * @function storageGet - Get data from local storage
+   * @function get - Get data from local storage
    * @returns {any|*[]}
    */
-  static storageGet = () => {
+  static get = () => {
     return JSON.parse(localStorage.getItem('notes')) || []
       .sort((a, b) => new Date(a.updated) > new Date(b.updated) ? -1 : 1);
   };
 
   /**
-   * @function storageSet - Set data to local storage
+   * @function set - Set data to local storage
    * @param note
    */
-  static storageSet = (note) => {
-    const notes = LocalStorage.storageGet();
+  static set = (note) => {
+    const notes = Storage.get();
     const existingNote = notes.find(({ id }) => id === note.id);
 
     if (existingNote) {
@@ -32,11 +35,10 @@ export default class LocalStorage {
   };
 
   /**
-   * @function storageDelete - Delete item from local storage
+   * @function delete - Delete item from local storage
    * @param noteId
    */
-  static storageDelete = (noteId) => {
-    const notes = LocalStorage.storageGet().filter(({ id }) => id !== noteId);
-    localStorage.setItem('notes', JSON.stringify(notes));
+  static delete = (noteId) => {
+    localStorage.setItem('notes', JSON.stringify(Storage.get().filter(({ id }) => id !== noteId)));
   };
 }
